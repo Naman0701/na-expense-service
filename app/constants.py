@@ -1,4 +1,3 @@
-SERVICE_ACCOUNT_FILE = "creds/service_account.json"
 SPREADSHEET_NAME = "Finance"
 WORKSHEET_NAME = "Expenses"
 SHEETS_API = "https://www.googleapis.com/auth/spreadsheets"

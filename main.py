@@ -1,5 +1,7 @@
 # main.py
+import json
 import logging
+import os
 
 from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
@@ -10,8 +12,7 @@ from google.oauth2.service_account import Credentials
 
 from gspread.utils import ValueInputOption
 
-from app.constants import DRIVE_API, SHEETS_API, SERVICE_ACCOUNT_FILE, WORKSHEET_NAME, \
-    SPREADSHEET_NAME, SPEND_TABLE_RANGE
+from app.constants import DRIVE_API, SHEETS_API, WORKSHEET_NAME, SPREADSHEET_NAME, SPEND_TABLE_RANGE
 
 log = logging.getLogger(__name__)
 app = FastAPI()
@@ -20,13 +21,17 @@ templates = Jinja2Templates(directory="templates")
 
 SCOPES = [SHEETS_API, DRIVE_API]
 
+def get_credentials():
+    creds_json = os.environ["GCP_CREDS_JSON"]
+    return json.loads(creds_json)
+
 
 def get_worksheet():
     """
     - Authenticate via service account credentials.
     - Open a specific spreadsheet and worksheet.
     """
-    creds = Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+    creds = Credentials.from_service_account_info(get_credentials(), scopes=SCOPES)
     client = gspread.authorize(creds)
     sheet = client.open(SPREADSHEET_NAME).worksheet(WORKSHEET_NAME)
     return sheet
