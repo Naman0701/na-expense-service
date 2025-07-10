@@ -44,8 +44,8 @@ async def index(request: Request):
     """
     return templates.TemplateResponse("index.html", {"request": request})
 
-@app.head("/", response_class=HTMLResponse)
-async def head_index():
+@app.head("/health", response_class=HTMLResponse)
+async def health_check():
     """
     Handle HEAD request to the index route.
     This is useful for checking if the resource exists without fetching it.
