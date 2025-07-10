@@ -15,6 +15,7 @@ from gspread.utils import ValueInputOption
 from app.constants import DRIVE_API, SHEETS_API, WORKSHEET_NAME, SPREADSHEET_NAME, SPEND_TABLE_RANGE
 
 log = logging.getLogger(__name__)
+log.setLevel(logging.INFO)
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
