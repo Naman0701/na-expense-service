@@ -63,10 +63,18 @@
         document.querySelector('input[type="date"]').value = today;
 
         const params = new URLSearchParams(window.location.search);
-        if (params.get("status") === "success") {
+        const status = params.get("status");
+
+        if (status === "success") {
             showSnackbar("✅ Expense added successfully!");
-        } else if (params.get("status") === "error") {
+        } else if (status === "error") {
             showSnackbar("⚠️ Failed to submit expense.");
+        }
+
+        if (status) {
+            setTimeout(() => {
+                window.location.href = window.location.origin + window.location.pathname;
+            }, 3000);
         }
     });
 </script>
