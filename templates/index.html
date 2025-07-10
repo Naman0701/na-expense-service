@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Expense Tracker</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<nav class="navbar">
+    <div class="brand">NA Expense Tracker</div>
+    <ul class="nav-links">
+        <li><a href="/" class="active">Add Expense</a></li>
+        <li><a href="#" onclick="alert('Coming soon')">List Expense</a></li>
+        <li><a href="#" onclick="alert('Coming soon')">Show Pie Chart</a></li>
+    </ul>
+    <div class="menu-toggle" id="mobile-menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </div>
+</nav>
+
+<div class="container">
+    <h1>Log an Expense</h1>
+    <form action="/submit" method="post">
+        <label>Date<input type="date" name="date" required></label>
+        <label>Expense<input type="text" name="name" placeholder="Biryani" required></label>
+        <label>Category<select name="category" required>
+            <option value="" disabled selected>Select</option>
+            <option selected>Outside Food</option>
+            <option>Grocery</option>
+            <option>Entertainment</option>
+            <option>Office Travel</option>
+            <option>Bus Travel</option>
+            <option>Other Travel</option>
+            <option>V</option>
+            <option>Other</option>
+        </select></label>
+        <label>Priority<select name="priority" required>
+            <option value="" disabled selected>Select</option>
+            <option>P0</option>
+            <option selected>P1</option>
+            <option>P2</option>
+        </select></label>
+        <label class="wide">Amount (₹)<input type="number" step="1" name="amount" placeholder="150"
+                                             required></label>
+        <button type="submit" class="submit-wide">Submit</button>
+    </form>
+</div>
+<!-- Snackbar notification -->
+<script>
+    function showSnackbar(message) {
+        const snack = document.getElementById("snackbar");
+        snack.textContent = message;
+        snack.classList.add("show");
+        setTimeout(() => snack.classList.remove("show"), 3000);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const today = new Date().toISOString().split("T")[0];
+        document.querySelector('input[type="date"]').value = today;
+
+        const params = new URLSearchParams(window.location.search);
+        if (params.get("status") === "success") {
+            showSnackbar("✅ Expense added successfully!");
+        } else if (params.get("status") === "error") {
+            showSnackbar("⚠️ Failed to submit expense.");
+        }
+    });
+</script>
+<div id="snackbar" class="snackbar"></div>
+
+<script>
+    document.getElementById('mobile-menu').addEventListener('click', () => {
+        document.querySelector('.nav-links').classList.toggle('active');
+    });
+    document.addEventListener("DOMContentLoaded", () => {
+        const now = new Date();
+        const istOffset = 5.5 * 60 * 60 * 1000; // 5.5 hours in milliseconds
+        const istDate = new Date(now.getTime() + istOffset);
+
+        // Format to YYYY-MM-DD
+        const todayIST = istDate.toISOString().split("T")[0];
+
+        // Set value of input[type="date"]
+        document.querySelector('input[type="date"]').value = todayIST;
+    });
+</script>
+</body>
+</html>
