@@ -43,6 +43,15 @@ async def index(request: Request):
     """
     return templates.TemplateResponse("index.html", {"request": request})
 
+@app.head("/", response_class=HTMLResponse)
+async def head_index():
+    """
+    Handle HEAD request to the index route.
+    This is useful for checking if the resource exists without fetching it.
+    """
+    log.info("Health Check: HEAD request to / by UptimeRobot")
+    return HTMLResponse(status_code=200, content="")
+
 
 @app.post("/submit")
 async def submit_expense(
