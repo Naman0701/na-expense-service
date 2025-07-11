@@ -95,8 +95,13 @@ async def get_chart(request: Request):
     """
     Render the chart page.
     """
-    CHART_IMG_URL = os.environ.get(CHART_IMAGE_URL)
+    chart_img_url = os.environ.get(CHART_IMAGE_URL)
     async with httpx.AsyncClient() as client:
-        resp = await client.get(CHART_IMG_URL)
-    return Response(content=resp.content, media_type="image/png")
+        resp = await client.get(chart_img_url)
+    headers = {
+        "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
+        "Pragma": "no-cache",
+        "Expires": "0",
+    }
+    return Response(content=resp.content, media_type="image/png", headers=headers)
 
