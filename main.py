@@ -1,9 +1,10 @@
 # main.py
 import json
-import logging
 import os
 
-from fastapi import FastAPI, Form, Request
+import httpx
+from dotenv import load_dotenv
+from fastapi import FastAPI, Form, Request, Response
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -13,17 +14,19 @@ from google.oauth2.service_account import Credentials
 from gspread.utils import ValueInputOption
 
 from app.constants import DRIVE_API, SHEETS_API, WORKSHEET_NAME, SPREADSHEET_NAME, SPEND_TABLE_RANGE
+from app.log import log
+from app.constants import GCP_CREDS_JSON, CHART_IMAGE_URL
 
-log = logging.getLogger(__name__)
-log.setLevel(logging.INFO)
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
 SCOPES = [SHEETS_API, DRIVE_API]
+load_dotenv()
+
 
 def get_credentials():
-    creds_json = os.environ["GCP_CREDS_JSON"]
+    creds_json = os.environ[GCP_CREDS_JSON]
     return json.loads(creds_json)
 
 
@@ -42,7 +45,13 @@ async def index(request: Request):
     """
     Render the HTML form to submit an expense.
     """
-    return templates.TemplateResponse("index.html", {"request": request})
+    return templates.TemplateResponse("index.html", {"request": request, "active": "add"})
+
+
+@app.get("/chart-view", response_class=HTMLResponse)
+async def show_chart(request: Request):
+    return templates.TemplateResponse("chart.html", {"request": request, "active": "chart"})
+
 
 @app.head("/health", response_class=HTMLResponse)
 async def health_check():
@@ -79,4 +88,15 @@ async def submit_expense(
     except Exception as e:
         log.error(f"Error submitting expense: {e}")
         return RedirectResponse(url="/?status=error", status_code=303)
+
+
+@app.get('/chart')
+async def get_chart(request: Request):
+    """
+    Render the chart page.
+    """
+    CHART_IMG_URL = os.environ.get(CHART_IMAGE_URL)
+    async with httpx.AsyncClient() as client:
+        resp = await client.get(CHART_IMG_URL)
+    return Response(content=resp.content, media_type="image/png")
 

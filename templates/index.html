@@ -1,30 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Expense Tracker</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="color-scheme" content="light dark">
-    <link rel="stylesheet" href="/static/style.css">
-</head>
-<body>
-<nav class="navbar">
-    <div class="brand">NA Expense Tracker</div>
-    <ul class="nav-links">
-        <li><a href="/" class="active">Add Expense</a></li>
-        <li><a href="#" onclick="alert('Coming soon')">List Expense</a></li>
-        <li><a href="#" onclick="alert('Coming soon')">Show Pie Chart</a></li>
-    </ul>
-    <div class="menu-toggle" id="mobile-menu">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-    </div>
-</nav>
-
-<div class="container">
-    <h1>Log an Expense</h1>
-    <form action="/submit" method="post">
+{% extends "base.html" %}
+{% block title %}Add Expense{% endblock %}
+{% block content %}
+<h1>Log an Expense</h1>
+<form action="/submit" method="post">
         <label>Date<input type="date" name="date" required></label>
         <label>Expense<input type="text" name="name" placeholder="Biryani" required></label>
         <label>Category<select name="category" required>
@@ -48,53 +26,4 @@
                                              required></label>
         <button type="submit" class="submit-wide">Submit</button>
     </form>
-</div>
-<!-- Snackbar notification -->
-<script>
-    function showSnackbar(message) {
-        const snack = document.getElementById("snackbar");
-        snack.textContent = message;
-        snack.classList.add("show");
-        setTimeout(() => snack.classList.remove("show"), 3000);
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-        const today = new Date().toISOString().split("T")[0];
-        document.querySelector('input[type="date"]').value = today;
-
-        const params = new URLSearchParams(window.location.search);
-        const status = params.get("status");
-
-        if (status === "success") {
-            showSnackbar("✅ Expense added successfully!");
-        } else if (status === "error") {
-            showSnackbar("⚠️ Failed to submit expense.");
-        }
-
-        if (status) {
-            setTimeout(() => {
-                window.location.href = window.location.origin + window.location.pathname;
-            }, 3000);
-        }
-    });
-</script>
-<div id="snackbar" class="snackbar"></div>
-
-<script>
-    document.getElementById('mobile-menu').addEventListener('click', () => {
-        document.querySelector('.nav-links').classList.toggle('active');
-    });
-    document.addEventListener("DOMContentLoaded", () => {
-        const now = new Date();
-        const istOffset = 5.5 * 60 * 60 * 1000; // 5.5 hours in milliseconds
-        const istDate = new Date(now.getTime() + istOffset);
-
-        // Format to YYYY-MM-DD
-        const todayIST = istDate.toISOString().split("T")[0];
-
-        // Set value of input[type="date"]
-        document.querySelector('input[type="date"]').value = todayIST;
-    });
-</script>
-</body>
-</html>
+{% endblock %}

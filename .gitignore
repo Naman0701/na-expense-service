@@ -25,3 +25,4 @@ adapted_message_processor/kafka/*.avro
 .python-version
 venv
 creds/
+.env

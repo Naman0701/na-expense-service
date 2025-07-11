@@ -29,6 +29,7 @@ body {
   background: var(--nav-bg); color: var(--nav-text);
   padding: 0.75rem 1rem; box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   position: sticky; top: 0; z-index: 10;
+  margin-bottom: 12px;
 }
 .brand {
   font-size: 1.3rem; font-weight: bold;
@@ -50,6 +51,12 @@ body {
 .menu-toggle {
   display: none; flex-direction: column; cursor: pointer;
   gap: 4px;
+  padding: 8px;
+  margin-right: 8px;
+  border-radius: 4px;
+}
+.menu-toggle:hover .bar {
+  background: var(--primary);
 }
 .menu-toggle .bar {
   width: 25px; height: 3px; background: var(--nav-text);
@@ -64,8 +71,23 @@ body {
     max-height: 0; overflow: hidden;
     transition: max-height 0.3s ease;
   }
-  .nav-links.active { max-height: 240px; }
-  .menu-toggle { display: flex; }
+  .nav-links.active {
+    max-height: 240px;
+    padding: 16px;
+  }
+  .nav-li {
+    margin: 8px;
+  }
+  .menu-toggle {
+    width: 40px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .menu-toggle .bar {
+    height: 4px;
+  }
 }
 
 /* Container/Form Layout */
@@ -129,4 +151,31 @@ button:hover { background: var(--primary-dark); transform: scale(1.02); }
   opacity: 1;
   transition: opacity 0.4s ease-in-out, visibility 0s;
 }
+.nav-links { display: flex; gap: 1rem; }
+.nav-links li a:hover,
+.nav-links li a.active {
+  background: var(--primary); color: #fff;
+}
+@media(max-width: 600px) {
+  .nav-links {
+    position: absolute; top: 60px; left: 0; background: var(--nav-bg);
+    width: 100%; flex-direction: column;
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  .menu-toggle { display: flex; }
+}
+.chart-container {
+  margin: 2rem auto;
+  max-width: 600px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  text-align: center;
+}
+.chart-container img {
+  width: 100%;
+  height: auto;
+}
+
 
