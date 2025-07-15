@@ -56,10 +56,20 @@ async def show_chart(request: Request):
 @app.head("/health", response_class=HTMLResponse)
 async def health_check():
     """
-    Handle HEAD request to the index route.
+    Handle HEAD request to the health check route.
     This is useful for checking if the resource exists without fetching it.
     """
     log.info("Health Check by UptimeRobot")
+    return HTMLResponse(status_code=200, content="")
+
+
+@app.get("/health", response_class=HTMLResponse)
+async def health_check():
+    """
+    Handle GET request to the health check route.
+    This is useful for checking if the resource exists without fetching it.
+    """
+    log.info("Health Check by Uptime")
     return HTMLResponse(status_code=200, content="")
 
 
